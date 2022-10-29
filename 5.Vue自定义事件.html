@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>发布订阅模式</title>
+  </head>
+  <body>
+    <script>
+      class EventEmitter {
+        constructor() {
+          // {'click':[fn1,fn2],'change':[fn]}
+          // 存储事件与处理函数的对应关系
+          this.subs = {};
+        }
+        //注册事件
+        //第一个参数为事件名称
+        // 第二个参数为处理函数
+        // 将对应的处理函数添加到subs对象中
+        $on(eventType, fn) {
+          //判断对应的 eventType 是否有相应的处理函数，如果有，直接添加到数组中，如果没有返回一个空数组。
+          /*1. 比如上面的 change 事件。这里是分为了两部分，change 事件名称作为 eventType，进行判断的时候，
+					对象中还是没有 change 事件的，那么这里先将 change 存入对象中，然后值是空数组，但是这里还没完执行下面的操作 */
+					if (!this.subs[eventType]) {
+            this.subs[eventType] = [];
+          }
+					/*2. 这里第二步将 change 事件中的回调函数给 push 到数组中*/
+          this.subs[eventType].push(fn);
+        }
+        //触发事件
+        $emit(eventType) {
+          if (this.subs[eventType]) {
+            this.subs[eventType].forEach((handler) => {
+              handler();
+            });
+          }
+        }
+      }
+      //测试代码
+      let em = new EventEmitter();
+      em.$on("click", () => {
+        console.log("click1");
+      });
+      em.$on("click", () => {
+        console.log("click2");
+      });
+      em.$emit("click");
+    </script>
+  </body>
+</html>

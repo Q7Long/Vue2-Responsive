@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>发布订阅模式</title>
+</head>
+<body>
+	<script>
+		// eventBus.js
+		// 创建事件中心对象   信号中心
+		let eventHub = new Vue()
+		// ComponentA.vue  发布者
+		let addTodo= function(){
+    // 发布消息(事件)就可以在B中去订阅事件 
+    eventHub.$emit('add-todo',{text:this.newTodoText})
+    this.newTodoText=''
+		}
+		// ComponentB.vue
+		// 订阅者
+		let created=function(){
+    // 订阅消息(事件)
+    eventHub.$on('add-todo',this.addTodo)
+		}
+	</script>
+</body>
+</html>

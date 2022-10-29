@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>模拟Vue 测试vue.js</title>
+</head>
+<body>
+	<div id="app">
+		<h1>插值表达式</h1>
+		<h3>{{msg}}</h3>
+		<h3>{{count}}</h3>
+		<h1>v-text</h1>
+		<div v-text="msg"></div>
+		<h1>v-model</h1>
+		<input type="text" v-model="msg">
+		<input type="text" v-model="count">
+	</div>
+	<script src="./dep.js"></script>
+	<script src="./watcher.js"></script>
+	<!-- 在vue.js中用到了compiler.js -->
+	<script src="./compiler.js"></script>
+	<!-- 注意这里先导入的是observer.js文件，因为在vue.js中用到了observer.js -->
+	<script src="./observer.js"></script>
+	<script src="./vue.js"></script>
+	<script>
+		// 这里的Vue是我们自己创建的Vue
+		let vm = new Vue({
+			//这里传入的是一个字符串，条件成立就会去找到对应的DOM元素 app这个div
+			el:"#app",   
+			data:{
+				msg:"Hello World",
+				count:10,
+				person:{
+					name:"Q7Long"
+				}
+			}
+		})
+		console.log(vm.$data.msg);
+		// vm.msg={text:'abc'}
+		/*然后在vue.js里面首先会对el和data属性进行一个保存
+		然后这里回去执行私有属性_proxyData，将所有的数据变成getter和setter，
+		并且注入到Vue实例中 Object.defineProperty(this, key,{}) this就是Vue实例
+		*/
+		/* 当我们打开页面的时候，页面未解析，因为这里关于插值表达式的解析我们还没有完成
+		我们在控制台输入 vm 就是我们创建的Vue实例，我们想要获取msg和count，这两个虽然是
+		data中的属性，但是已经被我们注入到了Vue实例的vm中了，所以我们可以直接通过vm.msg获取数据
+		vm.msg = "aaa" 我们就将数据改成了 aaa ，当我们执行get操作的时候获取的就是更改后的值 aaa
+		*/
+	</script>
+</body>
+</html>

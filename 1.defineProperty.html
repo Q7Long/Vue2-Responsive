@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>defineProperty</title>
+  </head>
+  <body>
+    <div id="app">hello</div>
+    <script>
+      //模拟Vue中的data选项(当)
+      let data = {
+        msg: "hello",
+      };
+      //模拟Vue的实例
+      let vm = {};
+      //数据劫持，只要是对vm对象中的msg属性进行操作的时候都会执行下面的代码，当访问或者设置vm中的成员的时候，做一些干预操作
+      Object.defineProperty(vm, "msg", {
+        //可枚举(可遍历)
+        enumerable: true,
+        //可配置（可以使用delete删除,可以通过defineProperty重新定义)
+        configurable: true,
+        //当获取值的时候执行
+        get() {
+          console.log("get:", data.msg);
+          return data.msg;
+        },
+        // 当设置值的时候执行
+        set(newValue) {
+          console.log("set:", newValue);
+          //设置的值与原有的值相同，则没有更改，所以不做任何操作
+          if (newValue === data.msg) {
+            return;
+          }
+          data.msg = newValue;
+          //数据更改，更新DOM的值
+          document.querySelector("#app").textContent = data.msg;
+        },
+      });
+      //测试
+      //执行set操作
+      vm.msg = "abc";
+      //执行get操作
+      console.log(vm.msg);
+    </script>
+  </body>
+</html>

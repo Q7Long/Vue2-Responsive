@@ -1,0 +1,41 @@
+<!-- Proxy.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proxy</title>
+  </head>
+  <body>
+    <div id="app">hello</div>
+    <script>
+      //模拟Vue中的data选项
+      let data = {
+        msg: "hello",
+        count: 0,
+      };
+      //模拟Vue实例
+      //为data创建一个代理对象vm,这样就可以通过vm.msg来获取data中的msg属性的值，而这时候会执行get方法
+      let vm = new Proxy(data, {
+        // 当访问vm的成员时会执行
+        //target表示代理的对象（这里为data对象），key表示所代理的对象中的属性  target就相当于是data(代理对象)，那么target[key] 就是获取 key 所对应的值
+        get(target, key) {
+          console.log("get key:", key, target[key]);
+          return target[key];
+        },
+        //当设置vm的成员时会执行
+        set(target, key, newValue) {
+          console.log("set key:", key, newValue);
+          if (target[key] === newValue) {
+            return;
+          }
+          target[key] = newValue;
+          document.querySelector("#app").textContent = target[key];
+        },
+      });
+      //测试
+      vm.msg = "aaaa";
+      console.log(vm.msg);
+    </script>
+  </body>
+</html>

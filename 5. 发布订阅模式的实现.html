@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue 自定义事件</title>
+  </head>
+  <body>
+    <script src="./vue.js"></script>
+    <script>
+      //Vue自定义事件
+      let vm = new Vue();
+      //注册事件(订阅消息)
+      vm.$on("dataChange", () => {
+        console.log("dataChange");
+      });
+      // 可以注册多个事件，甚至可以将一个事件定义多次
+      vm.$on("dataChange", () => {
+        console.log("dataChange");
+      });
+      //触发事件(发布消息)，需要有一个参数，参数是事件的名称
+      vm.$emit("dataChange");
+      /*
+      推测出了，内部是有一个对象来存储我们所注册的事件，只不过这个对象的格式是{"click":[fn1,fn2],"change":[fn]}，click是事件名字，事件名的值是数组，数组里面存放的是处理事件的函数，可以是多个，也就对应了上面的同一个事件可以注册多次
+      1. 可以猜测：当执行$on的时候，会将事件存储到对象中
+      2. 当执行$emit的时候，需要有一个参数，参数是事件的名称，在$emit内部从对象中找到对应的处理函数去依次执行
+      */
+    </script>
+  </body>
+</html>
